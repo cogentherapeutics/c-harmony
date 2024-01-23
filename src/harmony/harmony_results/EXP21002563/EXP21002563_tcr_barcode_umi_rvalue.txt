@@ -1,0 +1,8 @@
+['EXP21002563_Sample_01', {'union_r': 0.8476241160078438, 'union_r_pval': 0.0, 'intersection_r': 0.9150331272777352, 'intersection_r_pval': 0.0, 't12': 0.8333333333333334, 't25': 0.88}]
+['EXP21002563_Sample_02', {'union_r': 0.8784827235297669, 'union_r_pval': 0.0, 'intersection_r': 0.9593500530661744, 'intersection_r_pval': 0.0, 't12': 0.9166666666666666, 't25': 0.84}]
+['EXP21002563_Sample_03', {'union_r': 0.954683612993941, 'union_r_pval': 0.0, 'intersection_r': 0.9762406198706295, 'intersection_r_pval': 0.0, 't12': 0.9166666666666666, 't25': 0.96}]
+['EXP21002563_Sample_04', {'union_r': 0.9545299988292688, 'union_r_pval': 0.0, 'intersection_r': 0.9738881475526977, 'intersection_r_pval': 0.0, 't12': 1.0, 't25': 0.96}]
+['EXP21002563_Sample_05', {'union_r': 0.777284786422065, 'union_r_pval': 0.0, 'intersection_r': 0.860561582170407, 'intersection_r_pval': 0.0, 't12': 0.9166666666666666, 't25': 0.96}]
+['EXP21002563_Sample_06', {'union_r': 0.9085224845592165, 'union_r_pval': 0.0, 'intersection_r': 0.9529524719084492, 'intersection_r_pval': 0.0, 't12': 1.0, 't25': 0.96}]
+['EXP21002563_Sample_07', {'union_r': 0.9590348941857368, 'union_r_pval': 0.0, 'intersection_r': 0.990186467169834, 'intersection_r_pval': 0.0, 't12': 1.0, 't25': 0.96}]
+['EXP21002563_Sample_08', {'union_r': 0.9690692914056109, 'union_r_pval': 0.0, 'intersection_r': 0.9911903209544031, 'intersection_r_pval': 0.0, 't12': 0.8333333333333334, 't25': 0.84}]

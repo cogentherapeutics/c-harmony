@@ -1,0 +1,46 @@
+{
+  "family": "dev-harmony",
+  "taskRoleArn": "ECSTaskHarmonyDevelopment",
+  "executionRoleArn": "ECSHarmonyDevelopment",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "harmony",
+      "image": "867910344731.dkr.ecr.us-east-1.amazonaws.com/atlantis@harmony-0.0.1",
+      "essential": true,
+      "command": [
+        "echo",
+        "hello repertoire"
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "applicationDataVolume",
+          "containerPath": "/root/data"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "ecs/dev-harmony",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "volumes": [
+    {
+      "name": "applicationDataVolume",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "fs-06e945e86aa65f146",
+        "rootDirectory": "/harmony/data"
+      }
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1 vCPU",
+  "memory": "4GB"
+}

@@ -1,0 +1,14 @@
+version: '3'
+services:
+  harmony:
+    image: 867910344731.dkr.ecr.us-east-1.amazonaws.com/atlantis:harmony-<<<VERSION>>>
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      - HARMONY_ENV=development
+    container_name: harmony
+    volumes:
+      - ../src:/root/src
+    command: sleep infinity
+

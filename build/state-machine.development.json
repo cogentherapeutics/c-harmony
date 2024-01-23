@@ -1,0 +1,36 @@
+{
+  "Comment": "harmony step functions pipeline.",
+  "StartAt": "harmony",
+  "States": {
+    "harmony": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::ecs:runTask.sync",
+      "Parameters": {
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "ENABLED",
+            "SecurityGroups": [
+              "sg-0a09352e12043af05"
+            ],
+            "Subnets": [
+              "subnet-089dda37e54d186d0",
+              "subnet-0c4dbf8af79005367"
+            ]
+          }
+        },
+        "Cluster": "obelisk",
+        "TaskDefinition": "arn:aws:ecs:us-east-1:867910344731:task-definition/dev-harmony:1",
+        "Overrides": {
+          "ContainerOverrides": [
+            {
+              "Name": "harmony",
+              "Command.$": "States.Array('/root/.venv/bin/python', '/root/src/harmony/orchestrate.py', 'development')"
+            }
+          ]
+        }
+      },
+      "End": true
+    }
+  }
+}

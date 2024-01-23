@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+black = "*"
+coverage = "*"
+flake8 = "*"
+flake8-bugbear = "*"
+ipdb = "*"
+jupyterlab = "*"
+mypy = "*"
+pytest = "*"
+catalyst = {editable = true, ref = "master", git = "git+ssh://git@github.com/cogentherapeutics/catalyst.git"}
+harmony = {file = ".", editable = true}
+
+[requires]
+python_version = "3.10"
+python_full_version = "3.10.13"

@@ -1,0 +1,93 @@
+sample_id,feature,value
+EXP21002563_Sample_01,experiment_metadata,EXP21002563
+EXP21002563_Sample_01,gex_cellranger,3.1.0
+EXP21002563_Sample_01,gex_reference,grch38-2020-a
+EXP21002563_Sample_01,name_metadata,10xSample-1114
+EXP21002563_Sample_01,project,Trial 102 (IL-12)
+EXP21002563_Sample_01,registered_name,002-2001-None
+EXP21002563_Sample_01,sequenced_metadata,Yes
+EXP21002563_Sample_01,tcr_cellranger,3.1.0
+EXP21002563_Sample_01,tcr_reference,grch38-alts-ensembl-5.0.0
+EXP21002563_Sample_02,experiment_metadata,EXP21002563
+EXP21002563_Sample_02,gex_cellranger,3.1.0
+EXP21002563_Sample_02,gex_reference,grch38-2020-a
+EXP21002563_Sample_02,name_metadata,10xSample-1115
+EXP21002563_Sample_02,project,Trial 102 (IL-12)
+EXP21002563_Sample_02,registered_name,002-2001-None
+EXP21002563_Sample_02,sequenced_metadata,Yes
+EXP21002563_Sample_02,tcr_cellranger,3.1.0
+EXP21002563_Sample_02,tcr_reference,grch38-alts-ensembl-5.0.0
+EXP21002563_Sample_03,experiment_metadata,EXP21002563
+EXP21002563_Sample_03,gex_cellranger,3.1.0
+EXP21002563_Sample_03,gex_reference,grch38-2020-a
+EXP21002563_Sample_03,name_metadata,10xSample-1116
+EXP21002563_Sample_03,project,Trial 102 (IL-12)
+EXP21002563_Sample_03,registered_name,002-2001-None
+EXP21002563_Sample_03,sequenced_metadata,Yes
+EXP21002563_Sample_03,tcr_cellranger,3.1.0
+EXP21002563_Sample_03,tcr_reference,grch38-alts-ensembl-5.0.0
+EXP21002563_Sample_04,experiment_metadata,EXP21002563
+EXP21002563_Sample_04,gex_cellranger,3.1.0
+EXP21002563_Sample_04,gex_reference,grch38-2020-a
+EXP21002563_Sample_04,name_metadata,10xSample-1117
+EXP21002563_Sample_04,project,Trial 102 (IL-12)
+EXP21002563_Sample_04,registered_name,002-2001-None
+EXP21002563_Sample_04,sequenced_metadata,Yes
+EXP21002563_Sample_04,tcr_cellranger,3.1.0
+EXP21002563_Sample_04,tcr_reference,grch38-alts-ensembl-5.0.0
+EXP21002563_Sample_05,adt_stains,ADTPool467
+EXP21002563_Sample_05,experiment_metadata,EXP21002563
+EXP21002563_Sample_05,gex_cellranger,3.1.0
+EXP21002563_Sample_05,gex_reference,grch38-2020-a
+EXP21002563_Sample_05,hash_stain_info,HTO1-ALP199;ALP398;ALP522;ALP201
+EXP21002563_Sample_05,hash_stain_info,HTO2-ALP479;ALP409;ALP306;ALP320
+EXP21002563_Sample_05,hash_stain_info,HTO3-ALP183;ALP410;ALP413;ALP184
+EXP21002563_Sample_05,hashing_method,merge
+EXP21002563_Sample_05,name_metadata,10xSample-1118
+EXP21002563_Sample_05,probe_stains,ALS425
+EXP21002563_Sample_05,project,Trial 102 (IL-12)
+EXP21002563_Sample_05,registered_name,002-2001-HTO1;HTO3;HTO2
+EXP21002563_Sample_05,sequenced_metadata,Yes
+EXP21002563_Sample_05,tcr_cellranger,3.1.0
+EXP21002563_Sample_05,tcr_reference,grch38-alts-ensembl-5.0.0
+EXP21002563_Sample_06,adt_stains,ADTPool468
+EXP21002563_Sample_06,experiment_metadata,EXP21002563
+EXP21002563_Sample_06,gex_cellranger,3.1.0
+EXP21002563_Sample_06,gex_reference,grch38-2020-a
+EXP21002563_Sample_06,hash_stain_info,HTO4-ALP264;ALP474;ALP265
+EXP21002563_Sample_06,hash_stain_info,HTO5-ALP430
+EXP21002563_Sample_06,hash_stain_info,HTO6-ALP199;ALP398;ALP522;ALP201;ALP485
+EXP21002563_Sample_06,hashing_method,merge
+EXP21002563_Sample_06,name_metadata,10xSample-1119
+EXP21002563_Sample_06,probe_stains,ALS426
+EXP21002563_Sample_06,project,Trial 102 (IL-12)
+EXP21002563_Sample_06,registered_name,002-2001-HTO4;HTO5;HTO6
+EXP21002563_Sample_06,sequenced_metadata,Yes
+EXP21002563_Sample_06,tcr_cellranger,3.1.0
+EXP21002563_Sample_06,tcr_reference,grch38-alts-ensembl-5.0.0
+EXP21002563_Sample_07,adt_stains,ADTPool469
+EXP21002563_Sample_07,experiment_metadata,EXP21002563
+EXP21002563_Sample_07,gex_cellranger,3.1.0
+EXP21002563_Sample_07,gex_reference,grch38-2020-a
+EXP21002563_Sample_07,hash_stain_info,HTO7-ALP502
+EXP21002563_Sample_07,name_metadata,10xSample-1120
+EXP21002563_Sample_07,probe_stains,ALP502
+EXP21002563_Sample_07,project,Trial 102 (IL-12)
+EXP21002563_Sample_07,registered_name,002-2001-HTO7
+EXP21002563_Sample_07,sequenced_metadata,Yes
+EXP21002563_Sample_07,tcr_cellranger,3.1.0
+EXP21002563_Sample_07,tcr_reference,grch38-alts-ensembl-5.0.0
+EXP21002563_Sample_08,adt_stains,ADTPool470
+EXP21002563_Sample_08,experiment_metadata,EXP21002563
+EXP21002563_Sample_08,gex_cellranger,3.1.0
+EXP21002563_Sample_08,gex_reference,grch38-2020-a
+EXP21002563_Sample_08,hash_stain_info,HTO8-ALP479;ALP409;ALP306;ALP320;ALP486
+EXP21002563_Sample_08,hash_stain_info,HTO9-ALP503
+EXP21002563_Sample_08,hashing_method,merge
+EXP21002563_Sample_08,name_metadata,10xSample-1121
+EXP21002563_Sample_08,probe_stains,ALS427
+EXP21002563_Sample_08,project,Trial 102 (IL-12)
+EXP21002563_Sample_08,registered_name,002-2001-HTO9;HTO8
+EXP21002563_Sample_08,sequenced_metadata,Yes
+EXP21002563_Sample_08,tcr_cellranger,3.1.0
+EXP21002563_Sample_08,tcr_reference,grch38-alts-ensembl-5.0.0

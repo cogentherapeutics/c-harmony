@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "harmony"
+version = "0.0.1"
+
+[tool.pytest.ini_options]
+pythonpath = "src/harmony"
+addopts = [
+    "--import-mode=importlib",
+]
+
+[tool.coverage.run]
+branch = true
+source = [
+    "src",
+]
+
+[tool.catalyst]
+application = "harmony"
+module = "harmony"
+
+[tool.catalyst.blue]
+executor-role = "ECSHarmonyBlue"
+task-role = "ECSTaskHarmonyBlue"
+state-machine-role = "HarmonyStateMachineBlue"
+schedule-role = "HarmonySchedulerBlue"
+schedule-expression = "EXPRESSION"  # e.g. "rate(1 days)"
+revision = "1"  # Exclude line to always use latest revision.
+
+[tool.catalyst.green]
+executor-role = "ECSHarmonyGreen"
+task-role = "ECSTaskHarmonyGreen"
+state-machine-role = "HarmonyStateMachineGreen"
+schedule-role = "HarmonySchedulerGreen"
+schedule-expression = "EXPRESSION"  # e.g. "rate(1 days)"
+revision = "1"  # Exclude line to always use latest revision.
+
+[tool.catalyst.production]
+executor-role = "ECSHarmonyProduction"
+task-role = "ECSTaskHarmonyProduction"
+state-machine-role = "HarmonyStateMachineProduction"
+schedule-role = "HarmonySchedulerProduction"
+schedule-expression = "EXPRESSION"  # e.g. "rate(1 days)"
+revision = "1"  # Exclude line to always use latest revision.
+
+[tool.catalyst.edge]
+executor-role = "ECSHarmonyEdge"
+task-role = "ECSTaskHarmonyEdge"
+state-machine-role = "HarmonyStateMachineEdge"
+schedule-role = "HarmonySchedulerEdge"
+schedule-expression = "EXPRESSION"  # e.g. "rate(1 days)"
+revision = "1"  # Exclude line to always use latest revision.
+
+[tool.catalyst.development]
+executor-role = "ECSHarmonyDevelopment"
+task-role = "ECSTaskHarmonyDevelopment"
+state-machine-role = "HarmonyStateMachineDevelopment"
+schedule-role = "HarmonySchedulerDevelopment"
+schedule-expression = "EXPRESSION"  # e.g. "rate(1 days)"
+revision = "1"  # Exclude line to always use latest revision.
+
