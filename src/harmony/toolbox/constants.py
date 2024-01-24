@@ -1,7 +1,7 @@
 import os
 
 #RESULT_DIR = 's3://captan/haromony_results/'
-METADATA = 'metadata'
+#METADATA = 'metadata'
 RESULT_DIR = 'harmony_results'
 COMPARISON = 'CR7_refdata7'
 REFERENCE = 'experiments-v0.40'

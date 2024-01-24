@@ -156,3 +156,17 @@ def remove_unpaired(df):
     
     df_paired = df_filter1[(df_filter1['cdr3s_aa'].str.count('TRA')==1) & (df_filter1['cdr3s_aa'].str.count('TRB')==1) ]
     return df_paired
+
+def calculate_jaccard_similarity(set1, set2):
+    intersection_count = len(set1.intersection(set2))
+    union_count = len(set1.union(set2))
+    jaccard_similarity = intersection_count / union_count
+
+    return jaccard_similarity
+
+
+def make_clonotypes_from_tcr(df):
+    
+    df['clonotype'] = df['tra_cdr3']+';'+df['trb_cdr3'] 
+
+    return df

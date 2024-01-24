@@ -8,12 +8,13 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from itertools import chain
 
-from .constants import RESULT_DIR, METADATA, RESULTS_DICT,COMPARISON, REFERENCE
+from .constants import RESULT_DIR, RESULTS_DICT,COMPARISON, REFERENCE
 from .utils import (
      get_metadata,
      s3_file_exists, 
      s3_download, 
      file_sanity_check, 
+
 
 )
 from .aggregate import (
@@ -26,15 +27,16 @@ from .aggregate import (
                         load_df_clonotypes,
                         similar,
                         find_similarities,
-                        remove_unpaired
+                        remove_unpaired,
+                        calculate_jaccard_similarity,
+                        make_clonotypes_from_tcr
 
 
 )
 
 
-def get_files_harmony(sample):
+def get_files_harmony(sample,r1,r2 ):
     experiment = sample.split('_')[0]
-    print (sample)
     '''
     Historically, it has found that we missed to catch the incomplete generation of results files that happens due to some unknown aws challenge to laucnh the nextflow/memory issues etc. 
     This block of code is to see all necessary files are generated in REFERENCE and COMPARISON before we start do actual results comparsion. 
@@ -43,16 +45,39 @@ def get_files_harmony(sample):
 
     '''
     ###Tet-tenx files((:
-    tet = file_sanity_check(COMPARISON, REFERENCE, sample,'tet-tenx')
-    adt = file_sanity_check(COMPARISON, REFERENCE, sample,'adt-tenx')
-    merge = file_sanity_check(COMPARISON, REFERENCE, sample,'merge')
-    hash = file_sanity_check(COMPARISON, REFERENCE, sample,'hash-demux')
-    hit = file_sanity_check(COMPARISON, REFERENCE, sample,'hit-analysis')
-    tcr_clonotype = file_sanity_check(COMPARISON, REFERENCE, sample,'tcr-clonotypes')
-    tcr_stitching = file_sanity_check(COMPARISON, REFERENCE, sample,'tcr-stitching')
-    gex_analysis = file_sanity_check(COMPARISON, REFERENCE, sample,'gex-analysis')
-    
+    tet, reference, comparison = file_sanity_check(r1, r2,sample,'tet-tenx')
+    adt , reference, comparison= file_sanity_check(r1, r2, sample,'adt-tenx')
+    merge, reference, comparison = file_sanity_check(r1, r2, sample,'merge')
+    hash, reference, comparison = file_sanity_check(r1, r2, sample,'hash-demux')
+    hit, reference, comparison = file_sanity_check(r1, r2, sample,'hit-analysis')
+    tcr_clonotype, reference, comparison = file_sanity_check(r1, r2, sample,'tcr-clonotypes')
+    tcr_stitching, reference, comparison = file_sanity_check(r1, r2, sample,'tcr-stitching')
+    gex_analysis, reference, comparison = file_sanity_check(r1, r2, sample,'gex-analysis')
 
+
+    if tcr_clonotype:
+        s3_download(
+            f's3://captan/{reference}/{experiment}/preprocessing/tcr-tenx/{sample}/{sample}__TCR_cellranger_vdj/{sample}__TCR_filtered_contig_annotations.csv', f'tmp/{experiment}/reference/{sample}__TCR_filtered_contig_annotations.csv'
+        )
+        s3_download(
+            f's3://captan/{comparison}/{experiment}/preprocessing/tcr-tenx/{sample}/{sample}__TCR_cellranger_vdj/{sample}__TCR_filtered_contig_annotations.csv', f'tmp/{experiment}/comparison/{sample}__TCR_filtered_contig_annotations.csv'
+        )
+        s3_download(
+
+            f's3://captan/{reference}/{experiment}/preprocessing/tcr-tenx/{sample}/{sample}__TCR_cellranger_vdj/{sample}__TCR_clonotypes.csv', f'tmp/{experiment}/reference/{sample}__TCR_clonotypes.csv'
+        )
+        s3_download(
+
+            f's3://captan/{comparison}/{experiment}/preprocessing/tcr-tenx/{sample}/{sample}__TCR_cellranger_vdj/{sample}__TCR_clonotypes.csv', f'tmp/{experiment}/comparison/{sample}__TCR_clonotypes.csv'
+        )
+        s3_download (
+
+            f's3://captan/{reference}/{experiment}/preprocessing/tcr-stitching/{sample}/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', f'tmp/{experiment}/reference/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv'
+        )
+        s3_download (
+
+            f's3://captan/{comparison}/{experiment}/preprocessing/tcr-stitching/{sample}/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', f'tmp/{experiment}/comparison/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv'
+        )
 
     
     return ([sample, {'tet-tenx': tet,
@@ -203,14 +228,14 @@ Cell Ranger 7.1.0 found and each clonotype failed to be found by Cell Ranger 3.1
 '''
 def clonotypes_frequency(sample):
     experiment =sample.split('_')[0]
-    oldfn = f'/captan/{REFERENCE}/{experiment}/preprocessing/tcr-tenx/{sample}/{sample}__TCR_cellranger_vdj/{sample}__TCR_clonotypes.csv'
-    newfn = f'/captan/{COMPARISON}/{experiment}/preprocessing/tcr-tenx/{sample}/{sample}__TCR_cellranger_vdj/{sample}__TCR_clonotypes.csv'
+    # oldfn = f'tmp/{experiment}/reference/{sample}__TCR_clonotypes.csv'
+    # newfn = f'tmp/{experiment}/comparison/{sample}__TCR_clonotypes.csv'
 
-    s3_download(f's3:/{oldfn}', f'{REFERENCE}/{sample}__TCR_clonotypes.csv')
-    s3_download(f's3:/{newfn}', f'{COMPARISON}/{sample}__TCR_clonotypes.csv')
+    # s3_download(f's3:/{oldfn}', f'{REFERENCE}/{sample}__TCR_clonotypes.csv')
+    # s3_download(f's3:/{newfn}', f'{COMPARISON}/{sample}__TCR_clonotypes.csv')
 
-    df_old_clonotypes = load_df_clonotypes(f'{REFERENCE}/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']].rename(columns={'frequency': 'x'})
-    df_new_clonotypes = load_df_clonotypes(f'{COMPARISON}/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']].rename(columns={'frequency': 'y'})
+    df_old_clonotypes = load_df_clonotypes(f'tmp/{experiment}/reference/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']].rename(columns={'frequency': 'x'})
+    df_new_clonotypes = load_df_clonotypes(f'tmp/{experiment}/comparison/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']].rename(columns={'frequency': 'y'})
     
     df_inner = pd.merge(df_old_clonotypes, df_new_clonotypes, on='cdr3s_aa', how='inner')
     df_inner['rank_x'] = df_inner['x'].rank(ascending=False, na_option='bottom')
@@ -249,12 +274,20 @@ def clonotypes_frequency(sample):
 def get_top20_clonotypes(sample):
     experiment =sample.split('_')[0]
     
-    df_old_clonotypes = remove_unpaired(load_df_clonotypes(f'{REFERENCE}/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']])
-    df_new_clonotypes = remove_unpaired(load_df_clonotypes(f'{COMPARISON}/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']])
+    df_old_clonotypes = remove_unpaired(load_df_clonotypes(f'tmp/{experiment}/reference/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']])
+    df_new_clonotypes = remove_unpaired(load_df_clonotypes(f'tmp/{experiment}/comparison/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']])
 
     top_20_df1 = df_old_clonotypes.sort_values(by='frequency', ascending=False).head(20)
     return (pd.merge(top_20_df1, df_new_clonotypes, 
                      how ='left', on = 'cdr3s_aa')[['cdr3s_aa','frequency_x','frequency_y']].fillna(0))
 
 
- 
+def  tcr_stitching_comparsion(sample):
+    experiment =sample.split('_')[0]
+    tcr_set1 = pd.read_csv(f'tmp/{experiment}/reference/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', comment = '#')
+    tcr_set2 = pd.read_csv(f'tmp/{experiment}/comparison/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', comment = '#')
+    tcr_js = calculate_jaccard_similarity(set(tcr_set1['tcr_id']),set(tcr_set2['tcr_id']))
+    clonotype_js = calculate_jaccard_similarity(set(make_clonotypes_from_tcr(tcr_set1)['clonotype']), set(make_clonotypes_from_tcr(tcr_set2)['clonotype']))
+
+    return [sample , {'tcrid_js': tcr_js,'clonotype_js': clonotype_js}]
+

@@ -3,7 +3,8 @@
 """
 This tool generates the Sommelier tables used by the various UIs.
 
-    /root/.venv/bin/python /root/src/harmony_pipeline/orchestrate.py experiment.txt
+    pipenv run python /root/src/harmony_pipeline/orchestrate.py experiment.txt
+
 """
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from datetime import datetime

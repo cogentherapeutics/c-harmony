@@ -18,12 +18,12 @@ WORKDIR /root
 RUN apt-get update \
     && apt-get install -y \
         build-essential=12.9ubuntu3 \
-        curl=7.81.0-1ubuntu1.14 \
+        curl=7.81.0-1ubuntu1.15 \
         git=1:2.34.1-1ubuntu1.10 \
         libbz2-dev=1.0.8-5build1 \
         libffi-dev=3.4.2-4 \
         libreadline-dev=8.1.2-1 \
-        libsqlite3-dev=3.37.2-2ubuntu0.1 \
+        libsqlite3-dev=3.37.2-2ubuntu0.3 \
         libssl-dev=3.0.2-0ubuntu1.12 \
         zlib1g-dev=1:1.2.11.dfsg-2ubuntu9.2 \
     && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer \
@@ -58,3 +58,4 @@ COPY src /root/src
 WORKDIR /root
 
 CMD sleep infinity
+

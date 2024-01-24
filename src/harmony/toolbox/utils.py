@@ -1,7 +1,8 @@
 import pandas as pd
 import boto3, botocore
+import os 
 from pathlib import Path
-from .constants import METADATA, REFERENCE, RESULTS_DICT
+from .constants import  REFERENCE, RESULTS_DICT, COMPARISON
 
 def s3_file_exists(s3_file):
     try:
@@ -38,19 +39,21 @@ def s3_list(s3_file):
         raise
 
 
-def get_metadata(experiment):
-    metadata_file = f's3://captan/{REFERENCE}/{experiment}/metadata/{experiment}_samples.csv'
+def get_metadata(experiment,r1, r2 ):
+    metadata_file = f's3://captan/{r1}/{experiment}/metadata/{experiment}_samples.csv'
+    if not s3_file_exists(metadata_file):
+        r1 = 'CAPTAN-experiments-v0.30.0'
+    metadata_file = f's3://captan/{r1}/{experiment}/metadata/{experiment}_samples.csv'
 
-    s3_download(metadata_file,f'{METADATA}/{experiment}_samples.csv')
+    s3_download(metadata_file,f'metadata/{experiment}_samples.csv')
 
-    meta = pd.read_csv(f"{METADATA}/{experiment}_samples.csv")
+    meta = pd.read_csv(f"metadata/{experiment}_samples.csv")
 
     samples =set( meta['sample_id'])
-    return list(samples)
+    return list(samples), r1
 
 
 def file_sanity_check(r1, r2, sample, task):
-    cr3=0
     experiment =sample.split('_')[0]
     if task == 'hash-demux':
         reference_name = f's3://captan/{r1}/{experiment}/preprocessing/{task}/{sample}/{sample}_{RESULTS_DICT[task]}'
@@ -58,6 +61,7 @@ def file_sanity_check(r1, r2, sample, task):
             r1 ='CAPTAN-experiments-v0.30.0'
             reference_name = f's3://captan/{r1}/{experiment}/preprocessing/{task}/{sample}/{sample}_{RESULTS_DICT[task]}'
         comparison_name = f's3://captan/{r2}/{experiment}/preprocessing/{task}/{sample}/{sample}_{RESULTS_DICT[task]}'
+        
     elif task == 'gex-analysis':
         reference_name = f's3://captan/{r1}/{experiment}/preprocessing/{task}/{sample}/{sample}__GEX_cellranger_count/{sample}__{RESULTS_DICT[task]}'
         if not s3_file_exists(reference_name):
@@ -71,10 +75,9 @@ def file_sanity_check(r1, r2, sample, task):
             reference_name = f's3://captan/{r1}/{experiment}/preprocessing/{task}/{sample}/{sample}_{RESULTS_DICT[task]}'
         comparison_name = f's3://captan/{r2}/{experiment}/preprocessing/{task}/{sample}/{sample}__{RESULTS_DICT[task]}'
     if s3_file_exists(reference_name) and s3_file_exists(comparison_name):
-
-        return True
+        return (True, r1 , r2)
     else :
-        return False
+        return (False, r1, r2)
     
     def get_experiment(sample):
         return (sample.split('_')[0])

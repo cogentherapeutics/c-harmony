@@ -4,6 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+matplotlib = "*"
+pandas = "*"
+tabulate = "*"
+scipy = "*"
+boto3 = "*"
+botocore = "*"
 
 [dev-packages]
 black = "*"
