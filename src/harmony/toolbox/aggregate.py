@@ -2,15 +2,21 @@
 from math import ceil
 from tabulate import tabulate
 
-import re
+import re, csv,io, gzip
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy.io
 from scipy import stats
 from itertools import chain
 from .constants import *
 
-from .utils import s3_download, s3_list
+import tempfile
+from collections import defaultdict, namedtuple
+
+from collections import namedtuple
+
+from .utils import s3_download, s3_list, fetch_bytes
 
 def _agg_cdr3(x):
     """ Aggregates cdr3s, separating by semi-colon """
@@ -170,3 +176,74 @@ def make_clonotypes_from_tcr(df):
     df['clonotype'] = df['tra_cdr3']+';'+df['trb_cdr3'] 
 
     return df
+
+
+def expand(feature_ids, barcodes, data):
+    SparseGEX = namedtuple('SparseGEX', ['feature', 'barcode', 'umi'])
+    
+    return [SparseGEX(feature=feature_ids[feature_index], barcode=barcodes[barcode_index], umi=datum)
+            for feature_index, barcode_index, datum
+            in zip(data.row, data.col, data.data)]
+
+
+def load_gex_data(root, experiment, sample):
+    gex_path = f"s3://captan/{root}/{experiment}/preprocessing/gex-tenx/{sample}/{sample}__GEX_cellranger_count/{sample}__GEX_filtered_feature_bc_matrix"
+    barcodes_path = f"{gex_path}/barcodes.tsv.gz"
+    features_path = f"{gex_path}/features.tsv.gz"
+    matrix_path = f"{gex_path}/matrix.mtx.gz"
+    
+    feature_ids = map(lambda row: row[0], csv.reader(gzip.open(io.BytesIO(fetch_bytes(features_path)), 'rt'), delimiter='\t'))
+    barcodes = map(lambda row: row[0], csv.reader(gzip.open(io.BytesIO(fetch_bytes(barcodes_path)), 'rt'), delimiter="\t"))
+
+    
+    with tempfile.TemporaryDirectory() as d:
+        with open(f"{d}/matrix.mtx.gz", 'wb') as f:
+            f.write(fetch_bytes(matrix_path))
+        mat = scipy.io.mmread(f"{d}/matrix.mtx.gz")
+
+    return list(feature_ids), list(barcodes), mat
+
+
+
+
+
+def calculate_gex_umi_correlation(reference, comparison):
+    ref = defaultdict(int, (((sparse_gex.feature, sparse_gex.barcode), sparse_gex.umi) for sparse_gex in reference))
+
+    comp = defaultdict(int, (((sparse_gex.feature, sparse_gex.barcode), sparse_gex.umi) for sparse_gex in comparison))
+
+    feature_barcodes = list(set(ref.keys()).union(set(comp.keys())))
+
+    r, pval = stats.pearsonr([ref[feature_barcode] for feature_barcode in feature_barcodes],
+                               [comp[feature_barcode] for feature_barcode in feature_barcodes])
+
+
+    return{
+        'r': r,
+        'pval': pval,
+    }
+
+
+def calculate_cellranger_gex_umi_correlation_comparison(reference, comparison, sample, experiment):
+        
+    data = []
+    gex_path_reference =  f"s3://captan/{reference}/{experiment}/preprocessing/gex-tenx/{sample}/{sample}__GEX_cellranger_count/{sample}__GEX_filtered_feature_bc_matrix"
+    gex_path_comparison = f"s3://captan/{comparison}/{experiment}/preprocessing/gex-tenx/{sample}/{sample}__GEX_cellranger_count/{sample}__GEX_filtered_feature_bc_matrix"
+
+    ref_feature_ids, ref_barcodes, ref_mat = load_gex_data(reference, sample.split('_')[0], sample)
+    comp_feature_ids, comp_barcodes, comp_mat = load_gex_data(comparison, sample.split('_')[0], sample)
+
+    reference_data = expand(ref_feature_ids, ref_barcodes, ref_mat)
+    comparison_data = expand(comp_feature_ids, comp_barcodes, comp_mat)
+    
+    datum = calculate_gex_umi_correlation(reference_data, comparison_data)
+    datum['num_feature_ids'] = len(comp_feature_ids)
+    datum['num_barcodes'] = len(comp_barcodes)
+    datum['num_datapoints'] = len(comp_mat.data)
+    
+    # datum['sample_id'] = sample
+    #data.append(datum)
+    #print (data)
+    #columns = ['sample_id', 'r', 'pval', 'num_feature_ids', 'num_barcodes', 'num_datapoints']
+    return datum
+    #return pd.DataFrame(columns=columns, data=data)

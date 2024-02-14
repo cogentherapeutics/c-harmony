@@ -29,7 +29,9 @@ from .aggregate import (
                         find_similarities,
                         remove_unpaired,
                         calculate_jaccard_similarity,
-                        make_clonotypes_from_tcr
+                        make_clonotypes_from_tcr,
+                        calculate_cellranger_gex_umi_correlation_comparison
+                        
 
 
 )
@@ -78,7 +80,29 @@ def get_files_harmony(sample,r1,r2 ):
 
             f's3://captan/{comparison}/{experiment}/preprocessing/tcr-stitching/{sample}/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', f'tmp/{experiment}/comparison/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv'
         )
+        if gex_analysis:
+            s3_download(
 
+                f's3://captan/{reference}/{experiment}/preprocessing/gex-tenx/{sample}/{sample}__GEX_cellranger_count/{sample}__GEX_metrics_summary.csv', f'tmp/{experiment}/reference/{sample}__GEX_metrics_summary.csv'
+
+            )
+            s3_download(
+
+                f's3://captan/{comparison}/{experiment}/preprocessing/gex-tenx/{sample}/{sample}__GEX_cellranger_count/{sample}__GEX_metrics_summary.csv', f'tmp/{experiment}/comparison/{sample}__GEX_metrics_summary.csv'
+
+            )
+        if hit:
+
+            s3_download(
+
+                f's3://captan/{reference}/{experiment}/preprocessing/hit-analysis-experiment-wide/{experiment}__HITANALYSIS_hit_analysis_hits.csv', f'tmp/{experiment}/reference/{experiment}__HITANALYSIS_hit_analysis_hits.csv'
+
+            )
+            s3_download(
+
+                f's3://captan/{comparison}/{experiment}/preprocessing/hit-analysis-experiment-wide/{experiment}__HITANALYSIS_hit_analysis_hits.csv', f'tmp/{experiment}/comparison/{experiment}__HITANALYSIS_hit_analysis_hits.csv'
+
+            )
     
     return ([sample, {'tet-tenx': tet,
                             'adt-tenx': adt,
@@ -91,7 +115,7 @@ def get_files_harmony(sample,r1,r2 ):
                             }])
     
 
-def process_tcr_barcode_umi(sample, df_old, df_new):
+def process_tcr_barcode_umi(sample):
 
 
     '''
@@ -115,56 +139,65 @@ def process_tcr_barcode_umi(sample, df_old, df_new):
 
     experiment = sample.split('_')[0]
 
-    df_betas_union = pd.merge(
-        extract_betas(df_old)[['barcode', 'umis']].rename(columns={'umis': 'x'}),
-        extract_betas(df_new)[['barcode', 'umis']].rename(columns={'umis': 'y'}),
-        on='barcode',
-        how='outer'
-    ).fillna(0)
-    df_alphas_union = pd.merge(
-        extract_alphas(df_old)[['barcode', 'umis']].rename(columns={'umis': 'x'}),
-        extract_alphas(df_new)[['barcode', 'umis']].rename(columns={'umis': 'y'}),
-        on='barcode',
-        how='outer'
-    ).fillna(0)
-    union_r, union_r_pval = stats.pearsonr(pd.concat([df_betas_union.x, df_alphas_union.x]),
-                                    pd.concat([df_betas_union.y, df_alphas_union.y]))
+    try:
+        df_old = load_df(f'tmp/{experiment}/reference/{sample}__TCR_filtered_contig_annotations.csv')
+        df_new = load_df(f'tmp/{experiment}/comparison/{sample}__TCR_filtered_contig_annotations.csv')
 
-    #print (union_r,union_r_pval)
+        df_betas_union = pd.merge(
+            extract_betas(df_old)[['barcode', 'umis']].rename(columns={'umis': 'x'}),
+            extract_betas(df_new)[['barcode', 'umis']].rename(columns={'umis': 'y'}),
+            on='barcode',
+            how='outer'
+        ).fillna(0)
+        df_alphas_union = pd.merge(
+            extract_alphas(df_old)[['barcode', 'umis']].rename(columns={'umis': 'x'}),
+            extract_alphas(df_new)[['barcode', 'umis']].rename(columns={'umis': 'y'}),
+            on='barcode',
+            how='outer'
+        ).fillna(0)
+        union_r, union_r_pval = stats.pearsonr(pd.concat([df_betas_union.x, df_alphas_union.x]),
+                                        pd.concat([df_betas_union.y, df_alphas_union.y]))
+
+        #print (union_r,union_r_pval)
 
 
-    df_betas_intersection = pd.merge(
-        extract_betas(df_old)[['barcode', 'umis']].rename(columns={'umis': 'x'}),
-        extract_betas(df_new)[['barcode', 'umis']].rename(columns={'umis': 'y'}),
-        on='barcode',
-        how='inner'
-    )
-    
-    df_alphas_intersection = pd.merge(
-        extract_alphas(df_old)[['barcode', 'umis']].rename(columns={'umis': 'x'}),
-        extract_alphas(df_new)[['barcode', 'umis']].rename(columns={'umis': 'y'}),
-        on='barcode',
-        how='inner'
-    )
+        df_betas_intersection = pd.merge(
+            extract_betas(df_old)[['barcode', 'umis']].rename(columns={'umis': 'x'}),
+            extract_betas(df_new)[['barcode', 'umis']].rename(columns={'umis': 'y'}),
+            on='barcode',
+            how='inner'
+        )
+        
+        df_alphas_intersection = pd.merge(
+            extract_alphas(df_old)[['barcode', 'umis']].rename(columns={'umis': 'x'}),
+            extract_alphas(df_new)[['barcode', 'umis']].rename(columns={'umis': 'y'}),
+            on='barcode',
+            how='inner'
+        )
 
-    intersection_r, intersection_r_pval = stats.pearsonr(pd.concat([df_betas_intersection.x, df_alphas_intersection.x]),
-                                                        pd.concat([df_betas_intersection.y, df_alphas_intersection.y]))
+        intersection_r, intersection_r_pval = stats.pearsonr(pd.concat([df_betas_intersection.x, df_alphas_intersection.x]),
+                                                            pd.concat([df_betas_intersection.y, df_alphas_intersection.y]))
 
-    old_clonotypes = contigs_to_clonotypes(df_old, sample)
-    old_12 = old_clonotypes.iloc[:12].clonotype_label.tolist()
-    old_25 = old_clonotypes.iloc[:25].clonotype_label.tolist()
-    
-    new_clonotypes = contigs_to_clonotypes(df_new, sample)
-    new_12 = new_clonotypes.iloc[:12].clonotype_label.tolist()
-    new_25 = new_clonotypes.iloc[:25].clonotype_label.tolist()
-    #r_pvals.append
-    return ([sample, {'union_r': union_r,
-                            'union_r_pval': union_r_pval,
-                            'intersection_r': intersection_r,
-                            'intersection_r_pval': intersection_r_pval,
-                            't12': len(set(old_12).intersection(set(new_12)))/len(set(old_12)),
-                            't25': len(set(old_25).intersection(set(new_25)))/len(set(old_25))
-                            }]), df_alphas_union, df_betas_union, df_alphas_intersection, df_betas_intersection
+        old_clonotypes = contigs_to_clonotypes(df_old, sample)
+        old_12 = old_clonotypes.iloc[:12].clonotype_label.tolist()
+        old_25 = old_clonotypes.iloc[:25].clonotype_label.tolist()
+        
+        new_clonotypes = contigs_to_clonotypes(df_new, sample)
+        new_12 = new_clonotypes.iloc[:12].clonotype_label.tolist()
+        new_25 = new_clonotypes.iloc[:25].clonotype_label.tolist()
+        #r_pvals.append
+
+        return ([sample, {'union_r': union_r,
+                                'union_r_pval': union_r_pval,
+                                'intersection_r': intersection_r,
+                                'intersection_r_pval': intersection_r_pval,
+                                't12': len(set(old_12).intersection(set(new_12)))/len(set(old_12)),
+                                't25': len(set(old_25).intersection(set(new_25)))/len(set(old_25))
+                                }]), df_alphas_union, df_betas_union, df_alphas_intersection, df_betas_intersection
+    except:
+        print (f"Contig annotations files not found for {sample}")
+
+
 
 
 '''
@@ -233,61 +266,159 @@ def clonotypes_frequency(sample):
 
     # s3_download(f's3:/{oldfn}', f'{REFERENCE}/{sample}__TCR_clonotypes.csv')
     # s3_download(f's3:/{newfn}', f'{COMPARISON}/{sample}__TCR_clonotypes.csv')
+    try:
 
-    df_old_clonotypes = load_df_clonotypes(f'tmp/{experiment}/reference/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']].rename(columns={'frequency': 'x'})
-    df_new_clonotypes = load_df_clonotypes(f'tmp/{experiment}/comparison/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']].rename(columns={'frequency': 'y'})
-    
-    df_inner = pd.merge(df_old_clonotypes, df_new_clonotypes, on='cdr3s_aa', how='inner')
-    df_inner['rank_x'] = df_inner['x'].rank(ascending=False, na_option='bottom')
-    df_inner['rank_y'] = df_inner['y'].rank(ascending=False, na_option='bottom')
-    
-    df_outer = pd.merge(df_old_clonotypes, df_new_clonotypes, on='cdr3s_aa', how='outer')
-    df_outer['rank_x'] = df_outer['x'].rank(ascending=False, na_option='bottom')
-    df_outer['rank_y'] = df_outer['y'].rank(ascending=False, na_option='bottom')
-
-    
-    union_r, union_r_pval = stats.pearsonr(df_outer.fillna(0).x, df_outer.fillna(0).y)
-    union_rho, union_rho_pval = stats.spearmanr(df_outer.rank_x, df_outer.rank_y)
-    
-    intersection_r, intersection_r_pval = stats.pearsonr(df_inner.x, df_inner.y)
-    intersection_rho, intersection_rho_pval = stats.spearmanr(df_inner.rank_x, df_inner.rank_y)
-
-
-    df_outer = pd.merge(df_old_clonotypes, df_new_clonotypes,
-                        on='cdr3s_aa', how='outer').fillna(0)
-    
-    df_inner = pd.merge(df_old_clonotypes, df_new_clonotypes,
-                        on='cdr3s_aa', how='inner')
+        df_old_clonotypes = load_df_clonotypes(f'tmp/{experiment}/reference/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']].rename(columns={'frequency': 'x'})
+        df_new_clonotypes = load_df_clonotypes(f'tmp/{experiment}/comparison/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']].rename(columns={'frequency': 'y'})
         
-    return ( ([sample, {'union_r': union_r,
-                            'union_r_pval': union_r_pval,
-                            'intersection_r': intersection_r,
-                            'intersection_r_pval': intersection_r_pval,
-                            'union_rho': union_rho,
-                            'union_rho_pval': union_rho_pval,
-                            'intersection_rho': intersection_rho,
-                            'intersection_rho_pval': intersection_rho_pval
-                        }]), df_outer, df_inner)
+        df_inner = pd.merge(df_old_clonotypes, df_new_clonotypes, on='cdr3s_aa', how='inner')
+        df_inner['rank_x'] = df_inner['x'].rank(ascending=False, na_option='bottom')
+        df_inner['rank_y'] = df_inner['y'].rank(ascending=False, na_option='bottom')
+        
+        df_outer = pd.merge(df_old_clonotypes, df_new_clonotypes, on='cdr3s_aa', how='outer')
+        df_outer['rank_x'] = df_outer['x'].rank(ascending=False, na_option='bottom')
+        df_outer['rank_y'] = df_outer['y'].rank(ascending=False, na_option='bottom')
+
+        
+        union_r, union_r_pval = stats.pearsonr(df_outer.fillna(0).x, df_outer.fillna(0).y)
+        union_rho, union_rho_pval = stats.spearmanr(df_outer.rank_x, df_outer.rank_y)
+        
+        intersection_r, intersection_r_pval = stats.pearsonr(df_inner.x, df_inner.y)
+        intersection_rho, intersection_rho_pval = stats.spearmanr(df_inner.rank_x, df_inner.rank_y)
+
+
+        df_outer = pd.merge(df_old_clonotypes, df_new_clonotypes,
+                            on='cdr3s_aa', how='outer').fillna(0)
+        
+        df_inner = pd.merge(df_old_clonotypes, df_new_clonotypes,
+                            on='cdr3s_aa', how='inner')
+            
+        return ( ([sample, {'union_r': union_r,
+                                'union_r_pval': union_r_pval,
+                                'intersection_r': intersection_r,
+                                'intersection_r_pval': intersection_r_pval,
+                                'union_rho': union_rho,
+                                'union_rho_pval': union_rho_pval,
+                                'intersection_rho': intersection_rho,
+                                'intersection_rho_pval': intersection_rho_pval
+                            }]), df_outer, df_inner)
+    except:
+        print (f"TCR clonotypes files not found for {sample}")
+        pass
 
 
 
 def get_top20_clonotypes(sample):
     experiment =sample.split('_')[0]
-    
-    df_old_clonotypes = remove_unpaired(load_df_clonotypes(f'tmp/{experiment}/reference/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']])
-    df_new_clonotypes = remove_unpaired(load_df_clonotypes(f'tmp/{experiment}/comparison/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']])
 
-    top_20_df1 = df_old_clonotypes.sort_values(by='frequency', ascending=False).head(20)
-    return (pd.merge(top_20_df1, df_new_clonotypes, 
-                     how ='left', on = 'cdr3s_aa')[['cdr3s_aa','frequency_x','frequency_y']].fillna(0))
+    try:
+        df_old_clonotypes = remove_unpaired(load_df_clonotypes(f'tmp/{experiment}/reference/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']])
+        df_new_clonotypes = remove_unpaired(load_df_clonotypes(f'tmp/{experiment}/comparison/{sample}__TCR_clonotypes.csv')[['cdr3s_aa', 'frequency']])
+
+        top_20_df1 = df_old_clonotypes.sort_values(by='frequency', ascending=False).head(20)
+        return (pd.merge(top_20_df1, df_new_clonotypes, 
+                        how ='left', on = 'cdr3s_aa')[['cdr3s_aa','frequency_x','frequency_y']].fillna(0))
+    except:
+        print (f"TCR clonotypes files not found for {sample}")
 
 
 def  tcr_stitching_comparsion(sample):
     experiment =sample.split('_')[0]
-    tcr_set1 = pd.read_csv(f'tmp/{experiment}/reference/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', comment = '#')
-    tcr_set2 = pd.read_csv(f'tmp/{experiment}/comparison/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', comment = '#')
-    tcr_js = calculate_jaccard_similarity(set(tcr_set1['tcr_id']),set(tcr_set2['tcr_id']))
-    clonotype_js = calculate_jaccard_similarity(set(make_clonotypes_from_tcr(tcr_set1)['clonotype']), set(make_clonotypes_from_tcr(tcr_set2)['clonotype']))
+    try:
 
-    return [sample , {'tcrid_js': tcr_js,'clonotype_js': clonotype_js}]
+        tcr_set1 = pd.read_csv(f'tmp/{experiment}/reference/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', comment = '#')
+        tcr_set2 = pd.read_csv(f'tmp/{experiment}/comparison/{sample}__TCR_Full_Length_Stitched_TCRs_With_IDs.csv', comment = '#')
 
+        tcr_js = calculate_jaccard_similarity(set(tcr_set1['tcr_id']),set(tcr_set2['tcr_id']))
+        clonotype_js = calculate_jaccard_similarity(set(make_clonotypes_from_tcr(tcr_set1)['clonotype']), set(make_clonotypes_from_tcr(tcr_set2)['clonotype']))
+
+        return [sample , {'tcrid_js': tcr_js,'clonotype_js': clonotype_js}], 
+    except:
+
+        print (f"TCR stitching files not found for {sample}")
+        pass
+
+def hit_analysis(sample):
+
+    '''
+    We are examining the difference in hits identified between two cipher runs.Hits present in unique runs and both , will be taken based on "clonotype",
+    epitope, experiment and sample. 
+
+    TODO: We may extend later to see the diff in HTOS found in hts from both runs. 
+    
+    '''
+    data = {'No: of samples with more hits in CR7':[0], 'No: of samples with more hits in CR3':[0]}
+    more_hits_metric = pd.DataFrame(data)
+    recall_dict = []
+    precision_dict = []
+    experiment =sample.split('_')[0]
+    
+    try:
+        hit_old = pd.read_csv(f'tmp/{experiment}/reference/{experiment}__HITANALYSIS_hit_analysis_hits.csv')
+        hit_new = pd.read_csv(f'tmp/{experiment}/comparison/{experiment}__HITANALYSIS_hit_analysis_hits.csv')
+        if sorted(hit_old['sample'].unique().tolist()) == sorted(hit_new['sample'].unique().tolist()):
+            print ("inside hit anaysis")
+            if 'HTO' not in hit_old.columns:
+            
+                merged = pd.merge(
+                    hit_old[['clonotype', 'experiment', 'sample','antigen','epitope', 'rating', 'reject']], 
+                    hit_new[['clonotype', 'experiment', 'sample', 'antigen','epitope', 'rating', 'reject']], 
+                    left_on=['clonotype', 'epitope', 'experiment', 'sample'],
+                    right_on=['clonotype', 'epitope', 'experiment', 'sample'],
+                    how='outer',
+                    suffixes=('_new','_old'),
+                    #suffixes=('_v0.40_old', '_v0.40'),
+                    indicator=True
+                )
+            else:
+        
+                merged = pd.merge(
+                    hit_old[['clonotype', 'HTO', 'experiment', 'sample','antigen','epitope', 'rating', 'reject']], 
+                    hit_new[['clonotype',  'HTO','experiment', 'sample', 'antigen','epitope', 'rating', 'reject']], 
+                    left_on=['clonotype', 'epitope', 'experiment', 'sample'],
+                    right_on=['clonotype', 'epitope', 'experiment', 'sample'],
+                    how='outer',
+                    suffixes=('_new','_old'),
+                    #suffixes=('_v0.40_old', '_v0.40'),
+                    indicator=True
+                )
+
+
+            merged['_merge'] = merged['_merge'].map({'left_only': 'old', 'right_only': 'new', 'both': 'both'})
+            merge_count =  merged['_merge'].value_counts().reset_index().rename(columns={'index': 'version', '_merge': 'unique hits'})
+            
+    #         #merge_count_sorted = merge_count.sort_values(by='unique hits', ascending=False).reset_index()
+            
+
+    #         # if merge_count_sorted.at[1, 'unique hits'] > merge_count_sorted.at[2, 'unique hits'] :
+    #         #     more_hits_metric['No: of samples with more hits in new'] += 1
+    #         # else:
+    #         #     more_hits_metric['No: of samples with more hits in old'] += 1 
+
+
+    #     '''
+    #     TODO: Number of more hits in CR7, precision and recall to be done
+    #     '''
+
+    # ###Get top quality hits
+    #     top_new = hit_new[hit_new.rating >= 4]
+    #     top_old = hit_old[hit_old.rating >= 4]
+        
+    #     for sample in hit_new['sample'].unique().tolist():
+    #         new_sample_top = top_new[top_new['sample'] == sample].sort_values(by='rating', ascending=False)
+    #         old_sample_top = top_old[top_old['sample'] == sample].sort_values(by='rating', ascending=False)
+    #         new_sample_top.to_csv(f'{RESULT_DIR}/{experiment}/{sample}_top_hits_new.csv')
+    #         old_sample_top.to_csv(f'{RESULT_DIR}/{experiment}/{sample}_top_hits_old.csv')
+
+    #     return merged
+        return merge_count
+    except:
+        print (f"Hit files not found for {experiment}")
+
+def gex_analysis(sample, reference, comparison):
+    experiment =sample.split('_')[0]
+    print ("inside gex anaysis")
+
+    gex_df = calculate_cellranger_gex_umi_correlation_comparison(reference, comparison , sample, experiment)
+    print ([sample,gex_df])
+    return ([sample, gex_df])

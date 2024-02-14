@@ -1,0 +1,80 @@
+[
+  [
+    "EXP21001952_Sample_01",
+    {
+      "union_r": 0.9647675617031691,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9692581251047332,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.7193187533359892,
+      "union_rho_pval": 0.0,
+      "intersection_rho": 0.9303648561737982,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21001952_Sample_02",
+    {
+      "union_r": 0.9166221003608331,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9217944372462124,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.6775728214093677,
+      "union_rho_pval": 0.0,
+      "intersection_rho": 0.9124476481310981,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21001952_Sample_03",
+    {
+      "union_r": 0.7135017141470348,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.7942555714536159,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.6705378954003687,
+      "union_rho_pval": 0.0,
+      "intersection_rho": 0.9041783651208348,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21001952_Sample_04",
+    {
+      "union_r": 0.9621382925376246,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9647403281265599,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.6950329316296513,
+      "union_rho_pval": 0.0,
+      "intersection_rho": 0.9116580949526241,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21001952_Sample_05",
+    {
+      "union_r": 0.7235953525305243,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.8294011848708799,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.5998934469149646,
+      "union_rho_pval": 1.322434815774689e-214,
+      "intersection_rho": 0.9078039343968548,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21001952_Sample_06",
+    {
+      "union_r": 0.986345354645637,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9944832791270314,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.539896102737109,
+      "union_rho_pval": 1.8042845466878646e-297,
+      "intersection_rho": 0.9014895440375161,
+      "intersection_rho_pval": 0.0
+    }
+  ]
+]

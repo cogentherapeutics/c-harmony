@@ -1,0 +1,80 @@
+[
+  [
+    "EXP21001952_Sample_01",
+    {
+      "tet-tenx": true,
+      "adt-tenx": true,
+      "hit-analysis": true,
+      "hash-demux": false,
+      "merge": true,
+      "tcr-clonotypes": true,
+      "tcr-stitching": true,
+      "gex-analysis": true
+    }
+  ],
+  [
+    "EXP21001952_Sample_02",
+    {
+      "tet-tenx": true,
+      "adt-tenx": true,
+      "hit-analysis": true,
+      "hash-demux": false,
+      "merge": true,
+      "tcr-clonotypes": true,
+      "tcr-stitching": true,
+      "gex-analysis": true
+    }
+  ],
+  [
+    "EXP21001952_Sample_03",
+    {
+      "tet-tenx": true,
+      "adt-tenx": true,
+      "hit-analysis": true,
+      "hash-demux": false,
+      "merge": true,
+      "tcr-clonotypes": true,
+      "tcr-stitching": true,
+      "gex-analysis": true
+    }
+  ],
+  [
+    "EXP21001952_Sample_04",
+    {
+      "tet-tenx": true,
+      "adt-tenx": true,
+      "hit-analysis": true,
+      "hash-demux": false,
+      "merge": true,
+      "tcr-clonotypes": true,
+      "tcr-stitching": true,
+      "gex-analysis": true
+    }
+  ],
+  [
+    "EXP21001952_Sample_05",
+    {
+      "tet-tenx": true,
+      "adt-tenx": true,
+      "hit-analysis": true,
+      "hash-demux": false,
+      "merge": true,
+      "tcr-clonotypes": true,
+      "tcr-stitching": true,
+      "gex-analysis": true
+    }
+  ],
+  [
+    "EXP21001952_Sample_06",
+    {
+      "tet-tenx": true,
+      "adt-tenx": true,
+      "hit-analysis": true,
+      "hash-demux": false,
+      "merge": true,
+      "tcr-clonotypes": true,
+      "tcr-stitching": true,
+      "gex-analysis": true
+    }
+  ]
+]

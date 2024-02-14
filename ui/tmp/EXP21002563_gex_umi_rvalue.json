@@ -1,0 +1,82 @@
+[
+  [
+    "EXP21002563_Sample_01",
+    {
+      "r": 0.9871825929468309,
+      "pval": 0.0,
+      "num_feature_ids": 36601,
+      "num_barcodes": 8928,
+      "num_datapoints": 16796940
+    }
+  ],
+  [
+    "EXP21002563_Sample_02",
+    {
+      "r": 0.9894095590001317,
+      "pval": 0.0,
+      "num_feature_ids": 36601,
+      "num_barcodes": 8626,
+      "num_datapoints": 16361547
+    }
+  ],
+  [
+    "EXP21002563_Sample_03",
+    {
+      "r": 0.9968809504811842,
+      "pval": 0.0,
+      "num_feature_ids": 36601,
+      "num_barcodes": 22647,
+      "num_datapoints": 7808121
+    }
+  ],
+  [
+    "EXP21002563_Sample_04",
+    {
+      "r": 0.9966997092422871,
+      "pval": 0.0,
+      "num_feature_ids": 36601,
+      "num_barcodes": 23152,
+      "num_datapoints": 7390473
+    }
+  ],
+  [
+    "EXP21002563_Sample_05",
+    {
+      "r": 0.9945436711322297,
+      "pval": 0.0,
+      "num_feature_ids": 36601,
+      "num_barcodes": 9095,
+      "num_datapoints": 19616601
+    }
+  ],
+  [
+    "EXP21002563_Sample_06",
+    {
+      "r": 0.992663117033204,
+      "pval": 0.0,
+      "num_feature_ids": 36601,
+      "num_barcodes": 9352,
+      "num_datapoints": 19364740
+    }
+  ],
+  [
+    "EXP21002563_Sample_07",
+    {
+      "r": 0.9889578533303918,
+      "pval": 0.0,
+      "num_feature_ids": 36601,
+      "num_barcodes": 7922,
+      "num_datapoints": 9367515
+    }
+  ],
+  [
+    "EXP21002563_Sample_08",
+    {
+      "r": 0.9877758233915399,
+      "pval": 0.0,
+      "num_feature_ids": 36601,
+      "num_barcodes": 9811,
+      "num_datapoints": 7811291
+    }
+  ]
+]

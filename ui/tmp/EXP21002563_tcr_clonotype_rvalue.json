@@ -1,0 +1,106 @@
+[
+  [
+    "EXP21002563_Sample_01",
+    {
+      "union_r": 0.9901260074620619,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9918438863212989,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.6596739820200951,
+      "union_rho_pval": 6.390628336052927e-244,
+      "intersection_rho": 0.9378000465727081,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21002563_Sample_02",
+    {
+      "union_r": 0.9976954616766581,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9988477868721827,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.6487103150179793,
+      "union_rho_pval": 4.794137662304742e-224,
+      "intersection_rho": 0.9439409685523346,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21002563_Sample_03",
+    {
+      "union_r": 0.8051803689767739,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9396293663603336,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.4716779961880595,
+      "union_rho_pval": 1.1444880705827185e-198,
+      "intersection_rho": 0.862644347437689,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21002563_Sample_04",
+    {
+      "union_r": 0.8105122386771074,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.939175985314139,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.5078085435195756,
+      "union_rho_pval": 4.039244632836967e-235,
+      "intersection_rho": 0.8824786197410613,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21002563_Sample_05",
+    {
+      "union_r": 0.9834287395709881,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.988810365541911,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.6193373910356614,
+      "union_rho_pval": 1.4092341800364182e-236,
+      "intersection_rho": 0.9373078986789526,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21002563_Sample_06",
+    {
+      "union_r": 0.9940920793989999,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9972250549246254,
+      "intersection_r_pval": 0.0,
+      "union_rho": 0.6540010027073191,
+      "union_rho_pval": 8.408064434839005e-290,
+      "intersection_rho": 0.9373610522825755,
+      "intersection_rho_pval": 0.0
+    }
+  ],
+  [
+    "EXP21002563_Sample_07",
+    {
+      "union_r": 0.6123202415182767,
+      "union_r_pval": 2.4846837141995692e-85,
+      "intersection_r": 0.9487248888794149,
+      "intersection_r_pval": 8.4077304202639e-310,
+      "union_rho": 0.26215955191437795,
+      "union_rho_pval": 2.5338351392781026e-14,
+      "intersection_rho": 0.8247002089126997,
+      "intersection_rho_pval": 2.3435403484936045e-154
+    }
+  ],
+  [
+    "EXP21002563_Sample_08",
+    {
+      "union_r": 0.5883689573217205,
+      "union_r_pval": 7.428867989247164e-46,
+      "intersection_r": 0.9299533870938322,
+      "intersection_r_pval": 2.7325429565405735e-163,
+      "union_rho": 0.12189401078591888,
+      "union_rho_pval": 0.007631055375021159,
+      "intersection_rho": 0.8184053851189894,
+      "intersection_rho_pval": 2.751987293345474e-91
+    }
+  ]
+]

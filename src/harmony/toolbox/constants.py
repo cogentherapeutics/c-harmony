@@ -1,8 +1,10 @@
 import os
 
-#RESULT_DIR = 's3://captan/haromony_results/'
+RESULT_DIR = 's3://repertoire-application-storage/harmony'
 #METADATA = 'metadata'
-RESULT_DIR = 'harmony_results'
+
+environment = 'development'
+#RESULT_DIR = 'harmony_results'
 COMPARISON = 'CR7_refdata7'
 REFERENCE = 'experiments-v0.40'
 

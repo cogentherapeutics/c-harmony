@@ -6,9 +6,10 @@ This tool generates the Sommelier tables used by the various UIs.
     pipenv run python /root/src/harmony_pipeline/orchestrate.py experiment.txt
 
 """
+from toolbox.constants import  RESULT_DIR, REFERENCE, COMPARISON
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from datetime import datetime
-import sys
+import sys, subprocess
 
 from toolbox.pipeline import harmony
 
@@ -40,6 +41,11 @@ def main() -> None:
         print("Error: Please provide the --filename argument to specify the text file.")
     #for experiment in experiments:
     harmony(experiments)
+
+
+
+
+
     return 
 
 

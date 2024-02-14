@@ -1,0 +1,34 @@
+version: '3'
+services:
+  harmony-ui:
+    image: 867910344731.dkr.ecr.us-east-1.amazonaws.com/atlantis:harmony-ui-<<<VERSION>>>
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: harmony-ui
+    volumes:
+      - ../src:/root/src
+      - ../data:/root/data
+    command: sleep infinity
+
+    # ports:
+    #   - "9715:9715"
+    # environment:
+    #   - HARMONY_UI_ENV=production
+
+    # ports:
+    #   - "9716:9716"
+    # environment:
+    #   - HARMONY_UI_ENV=edge
+
+    ports:
+      - "9717:9717"
+    environment:
+      - HARMONY_UI_ENV=development
+
+    # command: streamlit run \
+    #  --browser.gatherUsageStats false \
+    #  --server.baseUrlPath "/harmony-ui" \
+    #  --server.port 9717 \
+    #  --theme.base light \
+    #  /root/src/harmony_ui/Welcome.py

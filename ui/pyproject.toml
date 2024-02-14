@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "harmony_ui"
+version = "0.0.1"
+
+[tool.pytest.ini_options]
+pythonpath = "src/harmony_ui"
+addopts = [
+    "--import-mode=importlib",
+]
+
+[tool.coverage.run]
+branch = true
+source = [
+    "src",
+]
+
+[tool.catalyst]
+application = "harmony-ui"
+module = "harmony-ui"
+
+[tool.catalyst.blue]
+executor-role = "ECSHarmonyUiBlue"
+task-role = "ECSTaskHarmonyUiBlue"
+count = 0
+revision = "1"  # Exclude line to always use latest revision.
+
+[tool.catalyst.green]
+executor-role = "ECSHarmonyUiGreen"
+task-role = "ECSTaskHarmonyUiGreen"
+count = 0
+revision = "1"  # Exclude line to always use latest revision.
+
+[tool.catalyst.production]
+executor-role = "ECSHarmonyUiProduction"
+task-role = "ECSTaskHarmonyUiProduction"
+count = 0
+revision = "1"  # Exclude line to always use latest revision.
+
+[tool.catalyst.edge]
+executor-role = "ECSHarmonyUiEdge"
+task-role = "ECSTaskHarmonyUiEdge"
+count = 0
+revision = "1"  # Exclude line to always use latest revision.
+
+[tool.catalyst.development]
+executor-role = "ECSHarmonyUiDevelopment"
+task-role = "ECSTaskHarmonyUiDevelopment"
+count = 0
+revision = "1"  # Exclude line to always use latest revision.
+

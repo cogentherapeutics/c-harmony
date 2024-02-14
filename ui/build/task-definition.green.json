@@ -1,0 +1,73 @@
+{
+  "family": "green-harmony-ui",
+  "taskRoleArn": "ECSTaskHarmonyUiGreen",
+  "executionRoleArn": "ECSHarmonyUiGreen",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "harmony-ui",
+      "image": "867910344731.dkr.ecr.us-east-1.amazonaws.com/atlantis@harmony-ui-0.0.1",
+      "portMappings": [
+        {
+          "containerPort": 9715,
+          "hostPort": 9715,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "command": [
+        "streamlit",
+        "run",
+        "--browser.gatherUsageStats",
+        "false",
+        "--browser.serverAddress",
+        "localhost",
+        "--server.port",
+        "9715",
+        "--server.baseUrlPath",
+        "/harmony-ui",
+        "--theme.base",
+        "#97C5AB",
+        "--theme.primaryColor",
+        "light",
+        "/root/src/harmony_ui/Welcome.py"
+      ],
+      "environment": [
+        {
+          "name": "HARMONY_UI_ENV",
+          "value": "green"
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "applicationDataVolume",
+          "containerPath": "/root/data",
+          "readOnly": true
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-create-group": "true",
+          "awslogs-group": "ecs/green-harmony-ui",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "volumes": [
+    {
+      "name": "applicationDataVolume",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "fs-0242d74cfa8601781",
+        "rootDirectory": "/harmony-ui/data"
+      }
+    }
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1 vCPU",
+  "memory": "2GB"
+}

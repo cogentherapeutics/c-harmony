@@ -1,0 +1,1 @@
+['EXP21002563_Sample_01', {'tet-tenx': False, 'adt-tenx': False, 'hit-analysis': False, 'hash-demux': False, 'merge': False, 'tcr-clonotypes': True, 'tcr-stitching': True, 'gex-analysis': True}]
