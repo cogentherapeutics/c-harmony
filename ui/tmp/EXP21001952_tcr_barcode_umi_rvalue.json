@@ -1,0 +1,68 @@
+[
+  [
+    "EXP21001952_Sample_01",
+    {
+      "union_r": 0.9064491546135267,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9535071732696212,
+      "intersection_r_pval": 0.0,
+      "t12": 1.0,
+      "t25": 1.0
+    }
+  ],
+  [
+    "EXP21001952_Sample_02",
+    {
+      "union_r": 0.8927699687204196,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9465849046351759,
+      "intersection_r_pval": 0.0,
+      "t12": 0.9166666666666666,
+      "t25": 0.96
+    }
+  ],
+  [
+    "EXP21001952_Sample_03",
+    {
+      "union_r": 0.8523580436647306,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9251846829374354,
+      "intersection_r_pval": 0.0,
+      "t12": 1.0,
+      "t25": 0.96
+    }
+  ],
+  [
+    "EXP21001952_Sample_04",
+    {
+      "union_r": 0.9001850632342548,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9444118721740424,
+      "intersection_r_pval": 0.0,
+      "t12": 0.9166666666666666,
+      "t25": 1.0
+    }
+  ],
+  [
+    "EXP21001952_Sample_05",
+    {
+      "union_r": 0.8409190258778728,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9277569933882786,
+      "intersection_r_pval": 0.0,
+      "t12": 1.0,
+      "t25": 0.92
+    }
+  ],
+  [
+    "EXP21001952_Sample_06",
+    {
+      "union_r": 0.8950226349646355,
+      "union_r_pval": 0.0,
+      "intersection_r": 0.9430087234670762,
+      "intersection_r_pval": 0.0,
+      "t12": 1.0,
+      "t25": 0.92
+    }
+  ]
+]
