@@ -13,6 +13,7 @@ ENVIRONMENT ='development'
 # Initialize environment and folders
 #ENVIRONMENT = os.environ.get('THESAURUS', 'edge')
 
+REFERENCE  ='' 
 # Constants
 LIB_TYPES = ['TET', 'TCR', 'ADT', 'GEX']
 

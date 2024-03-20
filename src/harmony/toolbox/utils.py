@@ -59,8 +59,6 @@ def get_datatypes(experiment, r1, ):
     fastqs = pd.read_csv(f"metadata/{experiment}_fastqs.csv")
     dtypes = fastqs['sample_id'].str.split('__').tolist()
     dtypes_df = pd.DataFrame(dtypes, columns=['sample', 'datatype'])
-    # dtypes = (fastqs['sample_id'].str.split('__'))
-    # dtypes_dict[dtypes[0]] = dtypes[1]
     return dtypes_df
 
 def get_metadata(experiment,r1, r2 ):

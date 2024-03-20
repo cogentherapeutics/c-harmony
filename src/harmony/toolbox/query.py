@@ -40,7 +40,7 @@ from .aggregate import (
 def get_files_harmony(sample,r1,r2 ):
     experiment = sample.split('_')[0]
     '''
-    Historically, it has found that we missed to catch the incomplete generation of results files that happens due to some unknown aws challenge to laucnh the nextflow/memory issues etc. 
+    Historically, it has found that we missed to catch the incomplete generation of results files that happens due to some unknown aws challenge to laucnh the nextflow/aws  issues etc. 
     This block of code is to see all necessary files are generated in REFERENCE and COMPARISON before we start do actual results comparsion. 
     TODO: may be later can replce with a better logic.
     
